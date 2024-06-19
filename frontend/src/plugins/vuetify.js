@@ -12,7 +12,7 @@ export default createVuetify({
     iconfont: 'mdi',
     values: {
       ...aliases,
-      mdi,
-    },
-  },
+      mdi
+    }
+  }
 })

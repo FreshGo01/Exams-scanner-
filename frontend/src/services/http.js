@@ -3,9 +3,9 @@ import router from '@/router'
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
     // 'Access-Control-Allow-Origin': 'https://aaf4-202-28-78-213.ngrok-free.app/',
-  },
+  }
 })
 
 // กำหนด interceptor สำหรับการตั้งค่า header
