@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 const form = ref(false)
-const visible = ref(false)
+const showPassword = ref(false)
 const email = ref(null)
 const password = ref(null)
 
@@ -30,13 +30,13 @@ function onSubmit() {
 
         <v-text-field
           v-model="password"
-          :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
-          :type="visible ? 'text' : 'password'"
+          :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="showPassword ? 'text' : 'password'"
           density="compact"
           placeholder="Enter your password"
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
-          @click:append-inner="visible = !visible"
+          @click:append-inner="showPassword = !showPassword"
         ></v-text-field>
 
         <v-btn class="mb-8" color="blue" size="large" variant="tonal" block> Log In </v-btn>
