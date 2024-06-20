@@ -12,22 +12,35 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    const newUser = new User();
+    newUser.name = createUserDto.name;
+    newUser.email = createUserDto.email;
+    newUser.password = createUserDto.password;
+    newUser.academy = createUserDto.academy;
+    return this.usersRepository.save(newUser);
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.usersRepository.find();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return this.usersRepository.findOneByOrFail({ id: id });
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  findUserByEmail(email: string) {
+    return this.usersRepository.findOneByOrFail({ email: email });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.usersRepository.findOneByOrFail({ id: id });
+    const updatedUser = this.usersRepository.merge(user, updateUserDto);
+    return this.usersRepository.save(updatedUser);
+  }
+
+  async remove(id: number) {
+    const user = await this.usersRepository.findOneByOrFail({ id: id });
+
+    return this.usersRepository.delete(user);
   }
 }

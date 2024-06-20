@@ -1,4 +1,5 @@
 <script setup>
+import router from '@/router'
 import { ref } from 'vue'
 const form = ref(false)
 const showPassword = ref(false)
@@ -42,12 +43,7 @@ function onSubmit() {
         <v-btn class="mb-8" color="blue" size="large" variant="tonal" block> Log In </v-btn>
 
         <v-card-text class="text-center">
-          <a
-            class="text-blue text-decoration-none"
-            href="#"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
+          <a class="text-blue text-decoration-none" @click="router.push('/register')">
             Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
           </a>
         </v-card-text>
