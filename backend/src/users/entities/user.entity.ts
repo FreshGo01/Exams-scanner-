@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exam } from 'src/exams/entities/exam.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -16,4 +17,7 @@ export class User {
 
   @Column()
   academy: string;
+
+  @OneToMany(() => Exam, (exam) => exam.createdBy)
+  exams: Exam[];
 }
