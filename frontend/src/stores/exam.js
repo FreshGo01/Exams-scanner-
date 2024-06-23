@@ -72,11 +72,12 @@ export const useExamStore = defineStore('exam', () => {
           return { [question.id]: correctAnswers }
         })
       ),
-      anwerssheet_template: AddForm.value.answerssheet_template
+      answerssheet_template: AddForm.value.answerssheet_template
     }
+    // console.log(body)
     try {
       const res = await http.post('/exams', body)
-      console.log(res)
+      // console.log(res)
       if (res.status === 201) {
         // router.push({ name: 'home' })
         Swal.fire({
