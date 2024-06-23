@@ -1,45 +1,40 @@
-<script setup></script>
+<script setup>
+import router from '@/router'
+import { useExamStore } from '@/stores/exam'
+import { onMounted } from 'vue'
+const examStore = useExamStore()
 
+onMounted(() => {
+  examStore.fetchExams()
+})
+</script>
+<!-- eslint-disable vue/valid-v-slot -->
 <template>
-  <v-card class="mx-auto pa-12 pb-8" elevation="8" style="width: 1800px" rounded="lg">
-    <header class="d-flex align-center">
-      <h1 class="text-center">การสร้างการสอบ</h1>
-      <v-spacer></v-spacer>
-      <v-btn>เพิ่มการสอบ</v-btn>
-    </header>
-
-    <v-table>
-      <thead>
-        <tr>
-          <th>วิชา</th>
-          <th>รหัสวิชา</th>
-          <th>ปีการศึกษา</th>
-          <th>ประเภทการสอบ</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>ENGLISH</td>
-          <td>123456</td>
-          <td>2567</td>
-          <td>สอบปลายภาค</td>
-          <td class="options">
-            <v-menu>
-              <template v-slot:activator="{ props }">
-                <v-btn v-bind="props"><v-icon icon="mdi-settings-helper"></v-icon></v-btn>
-              </template>
-              <v-list>
-                <v-list-item>
-                  <v-list-item-title>สร้างเฉลย</v-list-item-title>
-                  <v-list-item-title>ตรวจข้อสอบ</v-list-item-title>
-                  <v-list-item-title>ลบ</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
-  </v-card>
+  <v-container class="d-flex align-center justify-center">
+    <v-card class="mx-auto pa-12 pb-8" elevation="8" rounded="lg">
+      <v-data-table :headers="examStore.columns" :items="examStore.exams">
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title>ข้อมูลการสอบของฉัน</v-toolbar-title>
+            <v-btn color="success" variant="plain" @click="router.push({ name: 'addexam' })">
+              เพิ่มข้อมูล
+            </v-btn>
+          </v-toolbar>
+        </template>
+        <template #item.createdAt="{ item }">
+          {{ new Date(item.createdAt).toLocaleDateString() }}
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon
+            class="me-2"
+            size="small"
+            @click="router.push({ name: 'uploadanswers', params: { id: item.id } })"
+          >
+            mdi-note-search-outline
+          </v-icon>
+          <v-icon size="small" @click="examStore.deleteItem(item)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>

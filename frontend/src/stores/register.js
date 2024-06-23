@@ -2,8 +2,9 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import http from '../services/http'
 import router from '@/router'
+import Swal from 'sweetalert2'
 
-export const useUserStore = defineStore('user', () => {
+export const useRegisterStore = defineStore('register', () => {
   const first = ref(null)
   const last = ref(null)
   const email = ref(null)
@@ -11,6 +12,15 @@ export const useUserStore = defineStore('user', () => {
   const password = ref(null)
   const confirmPassword = ref(null)
   const showPassword = ref(false)
+
+  function clear() {
+    first.value = null
+    last.value = null
+    email.value = null
+    academy.value = null
+    password.value = null
+    confirmPassword.value = null
+  }
 
   const form = ref(false)
   async function onSubmit() {
@@ -23,10 +33,26 @@ export const useUserStore = defineStore('user', () => {
     try {
       const res = await http.post('/users', data)
       if (res.status === 201) {
-        router.push({ name: 'login' })
+        Swal.fire({
+          title: 'Success',
+          text: 'User created',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        }).then(() => {
+          clear()
+          router.push({ name: 'login' })
+        })
+        // router.push({ name: 'login' })
       }
     } catch (error) {
+      clear()
       console.error(error)
+      Swal.fire({
+        title: 'Error',
+        text: `Error: ${error.response.data.message}`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      })
     }
   }
 

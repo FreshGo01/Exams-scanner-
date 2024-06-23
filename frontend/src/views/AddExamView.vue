@@ -1,61 +1,71 @@
 <script setup>
-import { ref } from 'vue'
-const form = ref(false)
-const CourseTitle = ref(null)
-const CourseCode = ref(null)
-const AcademicYear = ref(null)
-const ExamType = ref(null)
+import { watch } from 'vue'
+import { useExamStore } from '@/stores/exam'
+const examStore = useExamStore()
 
-function onSubmit() {
-  return
-}
+// อัปเดต questions เมื่อจำนวนคำถามเปลี่ยนแปลง
+watch(
+  () => examStore.numberOfQuestions,
+  () => {
+    examStore.updateQuestions()
+  }
+)
 </script>
 
 <template>
   <v-container class="d-flex align-center justify-center">
     <v-card class="mx-auto pa-12 pb-8" elevation="8" style="width: 1000px" rounded="lg">
-      <v-form v-model="form" @submit.prevent="onSubmit">
-        <div class="text-subtitle-1 text-medium-emphasis">วิชา</div>
+      <v-form v-model="examStore.form" @submit.prevent="examStore.onSubmit">
+        <div class="text-subtitle-1 text-medium-emphasis">Topic</div>
         <v-text-field
-          v-model="CourseTitle"
+          v-model="examStore.AddForm.topic"
           density="compact"
-          placeholder="ใส่ชื่อวิชา"
+          placeholder="ใส่หัวข้อการสอบ เช่น สอบเก็บคะแนน"
           variant="outlined"
         ></v-text-field>
 
-        <div class="text-subtitle-1 text-medium-emphasis">รหัสวิชา</div>
+        <div class="text-subtitle-1 text-medium-emphasis">Details</div>
         <v-text-field
-          v-model="CourseCode"
+          v-model="examStore.AddForm.details"
           density="compact"
-          placeholder="ใส่รหัสวิชา"
-          variant="outlined"
-        ></v-text-field>
-
-        <div class="text-subtitle-1 text-medium-emphasis">ปีการศึกษา</div>
-        <v-text-field
-          v-model="AcademicYear"
-          density="compact"
-          placeholder="ใส่ปีการศึกษา"
+          placeholder="ใส่รายละเอียดของการสอบ เช่น สอบเก็บคะแนน ครั้งที่ 1 รายวิชาวิทยาศาสตร์เพื่อชีวิต ประจำปีการศึกษา 2564"
           variant="outlined"
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis">ประเภทการสอบ</div>
         <v-select
-          v-model="ExamType"
-          label="เลือกประเภทการสอบ"
-          :items="['สอบกลางภาค', 'สอบปลายภาค', 'สอบเก็บคะแนน', 'อื่น ๆ']"
+          v-model="examStore.AddForm.answerssheet_template"
+          :items="['Multiple Choice']"
           variant="outlined"
-          clearable
         ></v-select>
 
-        <v-divider></v-divider>
-            <div>เฉลยจร้าาาาาาาาาาาาาาาาา</div>
-        <v-divider></v-divider>
+        <div class="text-subtitle-1 text-medium-emphasis">จำนวนข้อ</div>
+        <v-number-input
+          v-model="examStore.numberOfQuestions"
+          :max="100"
+          :min="1"
+          :step="1"
+        ></v-number-input>
+
+        <div class="text-subtitle-1 text-medium-emphasis">เฉลย</div>
+        <div v-for="question in examStore.questions" :key="question.id" class="mb-4">
+          <div>Question {{ question.id }}</div>
+          <v-row>
+            <v-col cols="auto" v-for="option in question.options" :key="option.label">
+              <v-checkbox v-model="option.value" :label="option.label"></v-checkbox>
+            </v-col>
+          </v-row>
+        </div>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <!-- ปุ่ม Complete Registration ในกรอบ -->
-          <v-btn color="blue" size="small" variant="tonal" text right>
+          <v-btn
+            color="blue"
+            size="large"
+            type="submit"
+            variant="tonal"
+            :disabled="!examStore.canSubmit"
+          >
             <span class="mr-2">Complete</span>
             <v-icon right>mdi-chevron-right</v-icon>
           </v-btn>
