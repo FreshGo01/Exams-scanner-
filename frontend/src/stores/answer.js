@@ -123,7 +123,13 @@ export const useAnswerStore = defineStore('answer', () => {
         try {
           const res = await http.delete(`/answers/${item.id}`)
           if (res.status === 200) {
-            Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+            Swal.fire({
+              title: 'Deleted!',
+              text: 'Your file has been deleted.',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1500
+            })
             fetchAnswers(item.examId)
           }
         } catch (error) {

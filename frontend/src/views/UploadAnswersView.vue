@@ -3,7 +3,17 @@
 import { useAnswerStore } from '@/stores/answer'
 import { onMounted } from 'vue'
 const answerStore = useAnswerStore()
-
+const items = [
+  {
+    title: 'Home',
+    disabled: false,
+    href: '/'
+  },
+  {
+    title: 'Upload Answers',
+    disabled: true
+  }
+]
 
 onMounted(() => {
   answerStore.fetchAnswers()
@@ -13,6 +23,8 @@ onMounted(() => {
 <template>
   <v-container class="d-flex align-center justify-center">
     <v-card class="mx-auto pa-12 pb-8" elevation="8" rounded="lg" style="width: 1000px">
+      <v-breadcrumbs class="mb-6" :items="items"></v-breadcrumbs>
+      <v-card-title class="text-h4 text-center mb-10">Upload Answers</v-card-title>
       <v-form v-model="answerStore.form" @submit.prevent="answerStore.onSubmit(examId)">
         <v-row>
           <v-col>
@@ -38,6 +50,16 @@ onMounted(() => {
             >
               Upload
             </v-btn>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              color="success"
+              size="large"
+              variant="tonal"
+              @click="answerStore.fetchAnswers()"
+              prepend-icon="mdi-refresh"
+              >Refresh</v-btn
+            >
           </v-col>
         </v-row>
       </v-form>

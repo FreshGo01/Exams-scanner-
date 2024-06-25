@@ -1,11 +1,24 @@
 <script setup>
 import { useRegisterStore } from '../stores/register.js'
 const registerStore = useRegisterStore()
+const items = [
+  {
+    title: 'Login',
+    disabled: false,
+    href: '/login'
+  },
+  {
+    title: 'Register',
+    disabled: true
+  }
+]
 </script>
 
 <template>
   <v-container class="d-flex align-center justify-center">
     <v-card class="mx-auto pa-12 pb-8" style="width: 600px" rounded="lg" elevation="8">
+      <v-breadcrumbs :items="items"></v-breadcrumbs>
+      <v-card-title class="text-h4 text-center mb-10">Complete your registration</v-card-title>
       <v-form v-model="registerStore.form" @submit.prevent="registerStore.onSubmit">
         <div class="text-subtitle-1 text-medium-emphasis">First Name</div>
         <v-text-field
@@ -80,6 +93,7 @@ const registerStore = useRegisterStore()
             right
             :disabled="!registerStore.form"
             type="submit"
+            block
           >
             <span class="mr-2">Complete</span>
             <v-icon right>mdi-chevron-right</v-icon>

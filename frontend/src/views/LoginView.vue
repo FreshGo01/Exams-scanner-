@@ -2,11 +2,13 @@
 import { useLoginStore } from '@/stores/login'
 import router from '@/router'
 const loginStore = useLoginStore()
+
 </script>
 
 <template>
   <v-container class="d-flex align-center justify-center">
     <v-card class="mx-auto pa-12 pb-8" elevation="8" style="width: 600px" rounded="lg">
+      <v-card-title class="text-h4 text-center mb-10">Log in to your account</v-card-title>
       <v-form v-model="loginStore.form" @submit.prevent="loginStore.onSubmit">
         <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
