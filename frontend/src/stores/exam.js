@@ -18,7 +18,7 @@ export const useExamStore = defineStore('exam', () => {
     },
     {
       title: 'Template',
-      key: 'anwerssheet_template'
+      key: 'answerssheet_template'
     },
     {
       title: 'Created At',
