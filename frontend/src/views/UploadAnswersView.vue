@@ -79,7 +79,7 @@ onMounted(() => {
       </v-row>
     </v-card>
     <v-dialog v-model="answerStore.dialog" width="auto">
-      <v-img :src="answerStore.selectedFileUrl" cover max-width="1000" width="auto"></v-img>
+      <v-img :src="answerStore.selectedFileUrl" cover max-width="600" width="auto"></v-img>
     </v-dialog>
   </v-container>
 </template>

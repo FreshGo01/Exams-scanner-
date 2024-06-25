@@ -140,6 +140,11 @@ export const useExamStore = defineStore('exam', () => {
     })
   }
 
+  function downloadTemplate() {
+    const template_static = 'http://localhost:3000/uploads/Template01.pdf'
+    window.open(template_static, '_blank')
+  }
+
   return {
     columns,
     exams,
@@ -152,6 +157,7 @@ export const useExamStore = defineStore('exam', () => {
     onSubmit,
     updateQuestions,
     canSubmit,
-    deleteItem
+    deleteItem,
+    downloadTemplate
   }
 })
