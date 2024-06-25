@@ -47,11 +47,26 @@ const items = [
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis">ประเภทการสอบ</div>
-        <v-select
-          v-model="examStore.AddForm.answerssheet_template"
-          :items="['Multiple Choice']"
-          variant="outlined"
-        ></v-select>
+        <v-row>
+          <v-col cols="8">
+            <v-select
+              v-model="examStore.AddForm.answerssheet_template"
+              :items="['Multiple Choice']"
+              variant="outlined"
+            ></v-select>
+          </v-col>
+          <v-col cols="4">
+            <v-btn
+              color="blue"
+              @click="examStore.downloadTemplate"
+              class="mx-4"
+              prepend-icon="mdi-download"
+              size="large"
+            >
+              Download template
+            </v-btn>
+          </v-col>
+        </v-row>
 
         <div class="text-subtitle-1 text-medium-emphasis">จำนวนข้อ</div>
         <v-number-input

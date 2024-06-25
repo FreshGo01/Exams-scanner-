@@ -10,7 +10,7 @@ from imutils import contours
 import numpy as np
 import imutils
 
-image_path = 'test_image/S__221782018.jpg'
+image_path = 'test_image/LINE_ALBUM_25667_9.jpg'
 
 image = cv2.imread(image_path)
 image = imutils.resize(image, width=1600)
@@ -108,8 +108,7 @@ for c in cnts:
 
     # contours area
     cntAr = cv2.contourArea(c)
-
-    if (ratio >= 0.9 and ratio <= 1.1) and (cntAr > 1000):
+    if (ratio >= 0.8 and ratio <= 1.1) and (cntAr > 1000):
 
         mask = np.zeros(thresh.shape, dtype='uint8')
         cv2.drawContours(mask, [c], -1, 255, -1)
@@ -125,10 +124,10 @@ for c in cnts:
 
 # draw all conners
 output = paper.copy()
-# cv2.drawContours(output, connerCnts, -1, (0, 255, 0), 2)
-# cv2.imshow('paper', imutils.resize(output, height=650))
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
+cv2.drawContours(output, connerCnts, -1, (0, 255, 0), 2)
+cv2.imshow('connerCnts', imutils.resize(output, height=650))
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 topZoneImage = warped.shape[0] // 3
 # print('topZoneImage: ', topZoneImage)
@@ -207,12 +206,17 @@ for c in all_rectangles:
     ratio = w / float(h)
 
     area = cv2.contourArea(c)
+    # print('ratio: ', ratio, 'area: ', area)
 
     if not (0.9 <= ratio <= 1.1) and area > 100:
         rectangles.append(c)
 
 print('rectangles: ', len(rectangles))
-
+# draw rectangles
+output = paper.copy()
+cv2.drawContours(output, rectangles, -1, (0, 255, 0), 2)
+cv2.imshow('rectangles', imutils.resize(output, height=650))
+cv2.waitKey(0)
 
 horizontal_rectangles = []
 vertical_rectangles = []
@@ -224,12 +228,13 @@ for c in rectangles:
 
     area = cv2.contourArea(c)
 
-    if ratio > 1.1 and area < 300:
-        # print('ratio: ', ratio, 'area: ', area, 'horizontal')
-        horizontal_rectangles.append(c)
-    elif ratio < 0.9 and area < 300:
-        # print('ratio: ', ratio, 'area: ', area, 'vertical')
-        vertical_rectangles.append(c)
+    if (area > 100) and (area < 500):
+        if ratio > 1.1:
+            # print('ratio: ', ratio, 'area: ', area, 'horizontal')
+            horizontal_rectangles.append(c)
+        elif ratio < 0.9:
+            print('ratio: ', ratio, 'area: ', area, 'vertical')
+            vertical_rectangles.append(c)
 
 print('horizontal_rectangles: ', len(horizontal_rectangles))
 print('vertical_rectangles: ', len(vertical_rectangles))

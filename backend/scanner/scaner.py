@@ -149,10 +149,10 @@ def find_horizontal_rectangles_and_vertical_rectangles(rectangles):
 
             area = cv2.contourArea(c)
 
-            if ratio > 1.1 and area < 300:
+            if ratio > 1.1 and area > 100 and area < 500:
                 # print('ratio: ', ratio, 'area: ', area, 'horizontal')
                 horizontal_rectangles.append(c)
-            elif ratio < 0.9 and area < 300:
+            elif ratio < 0.9 and area > 100 and area < 500:
                 # print('ratio: ', ratio, 'area: ', area, 'vertical')
                 vertical_rectangles.append(c)
         # print('horizontal_rectangles:', len(horizontal_rectangles))
@@ -253,6 +253,9 @@ def scan(image_path):
         rectangles = find_rectangles(all_rectangles)
         horizontal_rectangles, vertical_rectangles = find_horizontal_rectangles_and_vertical_rectangles(
             rectangles)
+        if len(horizontal_rectangles) != 25 or len(vertical_rectangles) != 5:
+            raise ValueError(
+                f"Found {len(horizontal_rectangles)} horizontal rectangles and {len(vertical_rectangles)} vertical rectangles, please check the image again.")
 
         # # draw horizontal rectangles
         # output = paper.copy()
@@ -280,6 +283,9 @@ def scan(image_path):
 
         # print('cnts:', len(cnts))
         bubbles = find_bubbles_in_zone(cnts, min_x, max_x, min_y, max_y)
+        if len(bubbles) != 125:
+            raise ValueError(
+                f"Found {len(bubbles)} bubbles, please check the image again.")
 
         # draw bubbles
         # output = paper.copy()
