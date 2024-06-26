@@ -253,7 +253,7 @@ def scan(image_path):
         rectangles = find_rectangles(all_rectangles)
         horizontal_rectangles, vertical_rectangles = find_horizontal_rectangles_and_vertical_rectangles(
             rectangles)
-        if len(horizontal_rectangles) != 25 or len(vertical_rectangles) != 5:
+        if len(horizontal_rectangles) != 25 or len(vertical_rectangles) != 2:
             raise ValueError(
                 f"Found {len(horizontal_rectangles)} horizontal rectangles and {len(vertical_rectangles)} vertical rectangles, please check the image again.")
 

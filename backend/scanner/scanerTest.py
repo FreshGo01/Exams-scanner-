@@ -10,7 +10,8 @@ from imutils import contours
 import numpy as np
 import imutils
 
-image_path = 'test_image/LINE_ALBUM_25667_9.jpg'
+image_path = 'test_image/S__221782018.jpg'
+save_output_dir = './output'
 
 image = cv2.imread(image_path)
 image = imutils.resize(image, width=1600)
@@ -21,6 +22,10 @@ edged = cv2.Canny(blurred, 75, 200, None, 3, False)
 gradient = cv2.morphologyEx(
     edged, cv2.MORPH_GRADIENT, np.ones((3, 3), np.uint8))
 
+cv2.imwrite(f'{save_output_dir}/1.gray.jpg', gray)
+cv2.imwrite(f'{save_output_dir}/2.blurred.jpg', blurred)
+cv2.imwrite(f'{save_output_dir}/3.edged.jpg', edged)
+cv2.imwrite(f'{save_output_dir}/4.gradient.jpg', gradient)
 # cv2.imshow('edged', edged)
 # cv2.imshow('gradient', gradient)
 # cv2.waitKey(0)
@@ -32,6 +37,8 @@ cnts = cv2.findContours(gradient.copy(), cv2.RETR_EXTERNAL,
                         cv2.CHAIN_APPROX_SIMPLE)
 cnts = imutils.grab_contours(cnts)
 
+cv2.imwrite(f'{save_output_dir}/5.cnts.jpg', cv2.drawContours(
+    image.copy(), cnts, -1, (0, 255, 0), 5))
 # draw the contours on the image
 # cv2.drawContours(image, cnts, -1, (0, 255, 0), 2)
 # cv2.imshow('image', image)
@@ -58,6 +65,8 @@ if len(cnts) > 0:
             docCnt = approx
             break
 
+cv2.imwrite(f'{save_output_dir}/6.docCnt.jpg', cv2.drawContours(
+    image.copy(), [docCnt], -1, (0, 0, 255), 5))
 # show the contour of the paper
 # cv2.drawContours(image, [docCnt], -1, (0, 255, 0), 2)
 # cv2.imshow('image', image)
@@ -76,6 +85,8 @@ warped = four_point_transform(gray, docCnt.reshape(4, 2))
 # cv2.imshow('Scanned', imutils.resize(warped, height=650))
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
+cv2.imwrite(f'{save_output_dir}/7.paper.jpg', paper)
+cv2.imwrite(f'{save_output_dir}/8.warped.jpg', warped)
 
 # apply Otsu's thresholding method to binarize the warped
 # piece of paper
@@ -97,6 +108,9 @@ output = paper.copy()
 cv2.drawContours(output, cnts, -1, (0, 255, 0), 2)
 cv2.imshow('paper', output)
 cv2.waitKey(0)
+
+cv2.imwrite(f'{save_output_dir}/9.cnts.jpg', cv2.drawContours(
+    paper.copy(), cnts, -1, (0, 255, 0), 5))
 
 # find conner square marker for rotation (top-left, top-right, bottom-left) and marker infill is black
 connerCnts = []
@@ -128,6 +142,9 @@ cv2.drawContours(output, connerCnts, -1, (0, 255, 0), 2)
 cv2.imshow('connerCnts', imutils.resize(output, height=650))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+cv2.imwrite(f'{save_output_dir}/10.connerCnts.jpg', cv2.drawContours(
+    paper.copy(), connerCnts, -1, (0, 255, 0), 5))
 
 topZoneImage = warped.shape[0] // 3
 # print('topZoneImage: ', topZoneImage)
@@ -218,6 +235,9 @@ cv2.drawContours(output, rectangles, -1, (0, 255, 0), 2)
 cv2.imshow('rectangles', imutils.resize(output, height=650))
 cv2.waitKey(0)
 
+cv2.imwrite(f'{save_output_dir}/11.rectangles.jpg', cv2.drawContours(
+    paper.copy(), rectangles, -1, (0, 255, 0), 5))
+
 horizontal_rectangles = []
 vertical_rectangles = []
 
@@ -267,6 +287,9 @@ cv2.imshow('zone', imutils.resize(output, height=650))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
+cv2.imwrite(f'{save_output_dir}/12.zone.jpg', cv2.rectangle(
+    paper.copy(), (min_x, min_y), (max_x, max_y), (0, 255, 0), 5))
+
 # find circles bubbles in the answer zones
 bubbles = []
 for c in cnts:
@@ -291,6 +314,9 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 print('bubbles: ', len(bubbles))
+
+cv2.imwrite(f'{save_output_dir}/13.bubbles.jpg', cv2.drawContours(
+    paper.copy(), bubbles, -1, (0, 255, 0), 5))
 
 
 answers = {
@@ -323,6 +349,10 @@ for (i, row) in enumerate(horizontal_rectangles):
         i+1), (row[0][0][0], row[0][0][1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
     cv2.imshow('bubbles_in_row', imutils.resize(output, height=1000))
     cv2.waitKey(0)
+    
+    cv2.imwrite(f'{save_output_dir}/questions/14.bubbles_in_row_{i}.jpg', cv2.drawContours(
+        paper.copy(), bubbles_in_row, -1, (0, 255, 0), 5))
+    
 
     # find the bubbles that has filled > 50% in the row
     bubbles_filled = []
